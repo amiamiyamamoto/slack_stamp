@@ -2,7 +2,7 @@
 const puppeteer = require('puppeteer-core');
 const chromium  = require('chrome-aws-lambda');
 const request   = require('request');
-const {SITE_ID, SITE_PW, GAS_URL, SLACK_URL, SHEET_URL} = require('./config.json');
+const {SITE_ID, SITE_PW, GAS_URL, SLACK_URL, SHEET_URL, BASE_URL} = require('./config.json');
 
 exports.handler = async (event, context) => {
   
@@ -30,7 +30,7 @@ exports.handler = async (event, context) => {
     
     page = await browser.newPage();
     
-    await page.goto('https://p.secure.freee.co.jp/#work_records/'+ next_month +'/employees/' + employee_id);
+    await page.goto(BASE_URL + next_month +'/employees/' + employee_id);
     
     await page.focus('input[name=email]');
     await page.type('input[name=email]',SITE_ID);
