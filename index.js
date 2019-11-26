@@ -93,6 +93,28 @@ exports.handler = async (event, context) => {
     console.log('セーブ前');
     await save_button.click();
     
+    //const page = await browser.newPage();
+    await page.goto('http://www.meigensyu.com/quotations/view/random');
+    await page.waitFor('.meigenbox')
+    const meigen = await page.$eval('div.meigenbox .text', item => {
+      return item.textContent;
+    });
+    
+    //slackに通知
+    const slack_options = {
+      url: SLACK_URL,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      json: {
+        username: 'freee打刻',
+        icon_emoji: ':alarm_clock:',
+        text: meigen,
+      }
+    }
+
+    request(slack_options, function (error, response, body) {});
+    
+    
   } catch (e) {
     
     //スプレッドシートに記録
